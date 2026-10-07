@@ -1,38 +1,151 @@
-.App {
-  text-align: center;
+:root {
+  --bg-color: #121212;
+  --card-bg: rgba(24, 24, 24, 0.85);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --text-main: #ffffff;
+  --text-sub: #aaaaaa;
+  --accent-color: #ffcc00;
+  --accent-hover: #e6b800;
+  --danger-color: #ff4d4d;
+  --danger-hover: #cc3333;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Force every single React element into crisp, universal Arial typography */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* Background canvas setup handling dynamic category image assets behind the card templates */
+.background-container {
   min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  position: relative;
+  background-color: var(--bg-color);
 }
 
-.App-link {
-  color: #61dafb;
+/* Fixed backdrop image: pinned to the viewport, NOT the page's scrollable height.
+   Previously the image was painted directly on .background-container and sized with
+   background-size:cover against that element's own box - so if the page ended up
+   taller than one screen (e.g. a short todo list plus min-height:100vh), the image
+   just kept covering that taller box, leaving a long stretch of "empty" artwork
+   below the actual content. Pinning it to the viewport fixes that. */
+.fixed-bg {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Dark layout backdrop filter shading layer overlay - fixed for the same reason as .fixed-bg */
+.background-container::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.35); /* Shadows detailed parts of Arnold or Alphys' layouts */
+  z-index: 1;
+}
+
+.App {
+  width: 100%;
+  position: relative;
+  z-index: 2; /* Pushes input panels and text lists above backdrop overlays */
+}
+
+/* ---------- MOBILE-FRIENDLY LAYOUT RULES ---------- */
+
+/* Header bar: wraps instead of overflowing on narrow screens */
+.app-header {
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+.app-title {
+  font-size: clamp(15px, 4vw, 20px);
+  word-break: break-word;
+}
+
+.header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.subcategory-btn,
+.back-link {
+  white-space: nowrap;
+  min-height: 40px;
+}
+
+/* Main content area: padding shrinks on small screens, header may wrap taller */
+.app-content {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+/* Add-todo form: inputs stack on narrow screens instead of squeezing side by side */
+.todo-form-row {
+  flex-wrap: wrap;
+}
+
+.add-todo-btn {
+  min-height: 44px; /* comfortable tap target */
+}
+
+/* Todo list card: shrink padding/width so it fits small viewports */
+.todo-list-container {
+  width: 90%;
+}
+
+.todo-item {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.todo-item-actions button {
+  min-height: 36px;
+}
+
+@media (max-width: 600px) {
+  .app-header {
+    padding: 10px 16px !important;
+    position: static !important; /* let content flow below instead of overlapping when it wraps */
   }
-  to {
-    transform: rotate(360deg);
+
+  .app-content {
+    padding-top: 24px !important;
+  }
+
+  .todo-list-container {
+    width: 94%;
+    padding: 18px !important;
+    margin-top: 20px !important;
+  }
+
+  .todo-form-row {
+    width: 94% !important;
+  }
+
+  .todo-form-row input {
+    flex: 1 1 100% !important;
+  }
+
+  .add-todo-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .app-title {
+    font-size: 15px;
+  }
+
+  .subcategory-btn,
+  .back-link {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
   }
 }

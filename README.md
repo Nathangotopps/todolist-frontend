@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# Real-Time Shared To-Do List (Frontend)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A themed, real-time to-do list built with React and Firebase. Tasks sync instantly across devices, and each category has its own background, color palette and music.
 
-## Available Scripts
+This is the **frontend** repo. Login and session handling live in a separate PHP/MySQL backend: `<link to your backend repo>`.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Real-time sync with Firebase Realtime Database
+- Four categories: Financial, Fitness, Academic and Personal (with subcategories)
+- Per-category background, theme and background music, plus a completion chime and mute toggle
+- Secure sign-in: the PHP backend mints a Firebase custom token, so each user only sees their own data
+- Mobile-friendly layout
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## How it works
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. The user logs in through the PHP backend (`login.php`).
+2. `dashboard.php` creates a Firebase custom token for the logged-in user and links to this app as `?token=...&category=...&theme=...`.
+3. The app signs in with that token via Firebase Authentication and reads and writes only under that user's own `uid`.
 
-### `npm test`
+## Getting started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Requirements: Node.js and npm, a Firebase project, and the backend running (for example on XAMPP).
 
-### `npm run build`
+```bash
+npm install
+npm start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The app opens at http://localhost:3000. It needs a token from the backend to sign in, so start from the backend's dashboard page instead of opening the app directly.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Firebase setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Create a Firebase project with **Realtime Database** and **Authentication** enabled.
+2. Put your own web config in `src/firebase.js`. These values are public by design. Your database rules are what protect the data.
+3. Use rules that scope each user to their own data, for example:
 
-### `npm run eject`
+```json
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        "personal": {
+          "$subcategory": {
+            ".read": "auth != null && auth.uid === $uid",
+            ".write": "auth != null && auth.uid === $uid",
+            "$todoId": {
+              ".validate": "newData.hasChildren(['text', 'completed'])"
+            }
+          }
+        },
+        "$category": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid",
+          "$todoId": {
+            ".validate": "newData.hasChildren(['text', 'completed'])"
+          }
+        }
+      }
+    }
+  }
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Production build
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The dashboard link in `src/App.js` currently points to `http://localhost/MYSQL_work/dashboard.php`. Change it to your deployed backend URL before hosting.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## License
 
-## Learn More
+The source code in this repository is released under the [MIT License](LICENSE).
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The music, sound effects and images used by the app are **not** covered by that license.
+They belong to their respective creators and are used under their own licenses.
+See [CREDITS.md](CREDITS.md) for the full list and attribution.
