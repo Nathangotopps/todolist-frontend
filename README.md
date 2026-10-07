@@ -2,7 +2,7 @@
 
 A themed, real-time to-do list built with React and Firebase. Tasks sync instantly across devices, and each category has its own background, color palette and music.
 
-This is the **frontend** repo. Login and session handling live in a separate PHP/MySQL backend: `<link to your backend repo>`.
+This is the **frontend** repo. Login and session handling live in a separate PHP/MySQL backend: (https://github.com/Nathangotopps/todolist-frontend).
 
 ## Features
 
