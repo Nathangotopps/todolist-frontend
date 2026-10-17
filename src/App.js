@@ -8,11 +8,12 @@ import PlaceHolder from './PlaceHolder';
 import './App.css'; // This links your CSS rules directly to the React application!
 
 
+
 import financialBg from './financial.jpg';
 import fitnessBg from './fitness.jpg';
 import academicBg from './academic.jpg';
 import personalBg from './personalmiscellaneous.jpg';
-
+const DASHBOARD_URL = process.env.REACT_APP_DASHBOARD_URL || "http://localhost/MYSQL_work/dashboard.php";
 function App() {
   const [todos, setTodos] = useState([]);
   const audioInstanceRef = useRef(null);
@@ -237,11 +238,11 @@ function App() {
         } else {
           clearInterval(navFade);
           activeAudio.pause();
-          window.location.href = "http://localhost/MYSQL_work/dashboard.php";
+          window.location.href = DASHBOARD_URL; 
         }
       }, 20); 
     } else {
-      window.location.href = "http://localhost/MYSQL_work/dashboard.php";
+      window.location.href = DASHBOARD_URL;  
     }
   };
 
@@ -278,7 +279,7 @@ function App() {
     return (
       <div className="background-container" style={{ ...containerStyle, alignItems: 'center', justifyContent: 'center', color: '#fff', textAlign: 'center', padding: '20px' }}>
         <p>{authStatus === 'error' ? "Something went wrong signing you in." : "You need to log in first."}</p>
-        <a href="http://localhost/MYSQL_work/dashboard.php" style={{ color: '#ffcc00', fontWeight: 'bold' }}>
+        <a href={DASHBOARD_URL} style={{ color: '#ffcc00', fontWeight: 'bold' }}>
           ← Back to Dashboard
         </a>
       </div>
@@ -389,7 +390,7 @@ function App() {
           {/* Your back to dashboard anchor link remains exactly the same below... */}
           <a 
             className="back-link"
-            href="http://localhost/MYSQL_work/dashboard.php" 
+            href={DASHBOARD_URL}  
             onClick={handleBackToDashboard} 
             style={{ 
               textDecoration: 'none', 
