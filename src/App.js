@@ -279,9 +279,9 @@ function App() {
     return (
       <div className="background-container" style={{ ...containerStyle, alignItems: 'center', justifyContent: 'center', color: '#fff', textAlign: 'center', padding: '20px' }}>
         <p>{authStatus === 'error' ? "Something went wrong signing you in." : "You need to log in first."}</p>
-        <a href={DASHBOARD_URL} style={{ color: '#ffcc00', fontWeight: 'bold' }}>
-          ← Back to Dashboard
-        </a>
+        <a href={DASHBOARD_URL} style={{ color: '#ffcc00', fontWeight: 'bold', position: 'relative', zIndex: 1 }}>
+  ← Back to Dashboard
+</a>
       </div>
     );
   }
