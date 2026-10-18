@@ -4,6 +4,14 @@ A themed, real-time to-do list built with React and Firebase. Tasks sync instant
 
 This is the **frontend** repo. Login and session handling live in a separate PHP/MySQL backend: (https://github.com/Nathangotopps/todolist-backend).
 
+**Live demo:** start at https://yoyin-todo.xo.je and click "Try as Anonymous Guest" to look around without signing up.
+The React app itself is hosted at https://todolist-frontend-l46h.vercel.app (it needs a login token from the backend, so open it from the demo above).
+
+### Known limitations
+- No password reset: the free host can't send email, so a forgotten password means creating a new account.
+- Guest accounts are temporary: once you log out, you can't get back to a guest's tasks.
+- Runs on free tiers (Firebase Spark, InfinityFree, Vercel Hobby), so only about 100 people can be connected at once and the backend may be slow at times.
+
 ## Features
 
 - Real-time sync with Firebase Realtime Database
