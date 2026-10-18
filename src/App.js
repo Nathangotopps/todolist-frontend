@@ -163,8 +163,8 @@ function App() {
     audio.muted = isAppMuted; 
 
     audioInstanceRef.current = audio;
-    audio.play().catch(error => {
-      console.log("Audio playback constrained:", error);
+    audio.play().catch(() => {
+      // Browsers block autoplay until the user interacts with the page; expected, so stay silent.
     });
 
     return () => {
@@ -195,7 +195,7 @@ function App() {
     const appChime = document.getElementById('globalChime');
     if (appChime && !isAppMuted) {
       appChime.currentTime = 0; // Rewind sound instantly to allow fast consecutive clicks
-      appChime.play().catch(err => console.log("Sound error: ", err));
+      appChime.play().catch(() => {}); // autoplay can be blocked until the user interacts; that is expected
     }
 
     remove(todoRef).catch(error => {
@@ -212,14 +212,13 @@ function App() {
       const appChime = document.getElementById('globalChime');
       if (appChime) {
         appChime.currentTime = 0; 
-        appChime.play().catch(err => console.log("Sound error: ", err));
+        appChime.play().catch(() => {}); // autoplay can be blocked until the user interacts; that is expected
       }
     }
 
     update(todoRef, {
       completed: !currentStatus
     })
-    .then(() => console.log("Task completion updated for id:", id))
     .catch(error => console.error("Error updating completion:", error));
   };
 
@@ -281,7 +280,7 @@ function App() {
         <p>{authStatus === 'error' ? "Something went wrong signing you in." : "You need to log in first."}</p>
         <a href={DASHBOARD_URL} style={{ color: '#ffcc00', fontWeight: 'bold', position: 'relative', zIndex: 1 }}>
   ← Back to Dashboard
-</a>
+</a>  
       </div>
     );
   }

@@ -4,7 +4,7 @@ const Placeholder = () => {
 
     return (
         <div>
-            <h1></h1>
+            <h1 aria-hidden="true"></h1>
   
         </div>
     );
